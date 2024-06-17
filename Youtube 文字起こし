@@ -1,0 +1,20 @@
+from youtube_transcript_api import YouTubeTranscriptApi
+
+
+video_id = "ID"
+transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+
+for transcript in transcript_list:
+    for tr in transcript.fetch():
+        print(tr)
+transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+
+for transcript in transcript_list:
+
+    for tr in transcript.fetch():
+        print(tr)
+transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+
+for transcript in transcript_list:
+    for tr in transcript.fetch():
+        print(tr)
