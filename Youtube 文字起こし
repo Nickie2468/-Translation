@@ -18,3 +18,42 @@ transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
 for transcript in transcript_list:
     for tr in transcript.fetch():
         print(tr)
+
+
+import os
+checkDownLoadFolder = os.path.exists("download")
+if not checkDownLoadFolder:
+  os.mkdir("download")
+
+fileName = "001.mp4"
+
+audio = whisper.load_audio(f"/content/{fileName}")
+
+outputTextsArr = []
+while audio.size > 0:
+    tirmedAudio = whisper.pad_or_trim(audio)
+    startIdx = tirmedAudio.size
+    audio = audio[startIdx:]
+
+    mel = whisper.log_mel_spectrogram(tirmedAudio).to(model.device)
+
+    _, probs = model.detect_language(mel)
+
+
+    options = whisper.DecodingOptions()
+    result = whisper.decode(model, mel, options)
+
+    outputTextsArr.append(result.text)
+
+outputTexts = " ".join(outputTextsArr)
+print(outputTexts)
+
+with open(f"download/{fileName}.txt", "w") as f:
+  f.write(f"▼ Transcription of {fileName}\n")
+  f.write(outputTexts)
+
+
+
+from google.colab import files
+!zip -r download.zip download
+files.download("download.zip")
